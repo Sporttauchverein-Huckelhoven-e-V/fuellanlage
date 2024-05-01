@@ -1,0 +1,61 @@
+version: '3'
+
+############ required environment variables ############
+# DB_USER: database user in local database
+# DB_PASSWORD: database password in local database
+# DB_DATABASE: database name in local database
+# DB_ROOT_PASSWORD: root password for local database
+# REMOTE_DB_HOST: remote database host for synchronization
+# REMOTE_DB_PORT: remote database port for synchronization
+# REMOTE_DB_USER: remote database user for synchronization
+# REMOTE_DB_PASSWORD: remote database password for synchronization
+# REMOTE_DB_DATABASE: remote database name as destination for synchronization
+#######################################################
+
+
+services:
+  api:
+    image: ghcr.io/Sporttauchverein-Huckelhoven-e-V/fuellanlage-api:0.0.1
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_DATABASE: $DB_DATABASE
+    ports:
+      - "8080:5000"
+    depends_on:
+      - db
+    restart: unless-stopped
+  
+  db:
+    image: mysql:8.4.0
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: $DB_DATABASE
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
+
+  db-sync:
+    image: ghcr.io/Sporttauchverein-Huckelhoven-e-V/fuellanlage-db-sync:0.0.1
+    environment:
+      LOCAL_DB_HOST: db
+      LOCAL_DB_PORT: 3306
+      LOCAL_DB_USER: $DB_USER
+      LOCAL_DB_PASSWORD: $DB_PASSWORD
+      LOCAL_DB_DATABASE: $DB_DATABASE
+      REMOTE_DB_HOST: $REMOTE_DB_HOST
+      REMOTE_DB_PORT: $REMOTE_DB_PORT
+      REMOTE_DB_USER: $REMOTE_DB_USER
+      REMOTE_DB_PASSWORD: $REMOTE_DB_PASSWORD
+      REMOTE_DB_DATABASE: $REMOTE_DB_DATABASE
+      SHEDULE: 0 0 * * *
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  db-data:
