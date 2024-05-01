@@ -15,7 +15,7 @@ version: '3'
 
 services:
   api:
-    image: ghcr.io/Sporttauchverein-Huckelhoven-e-V/fuellanlage-api:0.0.1
+    image: ghcr.io/sporttauchverein-huckelhoven-e-v/fuellanlage-api:v0.0.1
     environment:
       DB_HOST: db
       DB_PORT: 3306
