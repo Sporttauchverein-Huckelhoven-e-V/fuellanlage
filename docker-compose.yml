@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
   
   db:
-    image: mariadb:11.3.2
+    image: arm64v8/mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
       MYSQL_DATABASE: $DB_DATABASE
