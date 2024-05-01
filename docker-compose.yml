@@ -39,23 +39,5 @@ services:
       - db-data:/var/lib/mysql
     restart: unless-stopped
 
-  db-sync:
-    image: ghcr.io/Sporttauchverein-Huckelhoven-e-V/fuellanlage-db-sync:0.0.1
-    environment:
-      LOCAL_DB_HOST: db
-      LOCAL_DB_PORT: 3306
-      LOCAL_DB_USER: $DB_USER
-      LOCAL_DB_PASSWORD: $DB_PASSWORD
-      LOCAL_DB_DATABASE: $DB_DATABASE
-      REMOTE_DB_HOST: $REMOTE_DB_HOST
-      REMOTE_DB_PORT: $REMOTE_DB_PORT
-      REMOTE_DB_USER: $REMOTE_DB_USER
-      REMOTE_DB_PASSWORD: $REMOTE_DB_PASSWORD
-      REMOTE_DB_DATABASE: $REMOTE_DB_DATABASE
-      SHEDULE: 0 0 * * *
-    depends_on:
-      - db
-    restart: unless-stopped
-
 volumes:
   db-data:
